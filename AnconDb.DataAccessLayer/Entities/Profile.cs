@@ -23,7 +23,9 @@ namespace AnconDb.DataAccessLayer.Entities
         /// </summary>
         public bool Units { get; set; }
 
-        public string Year { get; set; }
+        public int Year { get; set; }
+
+        public string Airport { get; set; }
 
         public string OperationType  { get; set; }
 

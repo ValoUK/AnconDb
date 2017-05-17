@@ -11,10 +11,10 @@ namespace AnconDb.DataAccessLayer.Repositories
 {
     public class RepositoryBase<TEntity> where TEntity : class, IEntity
     {
-        protected readonly ProfileDbContext _context;
+        protected readonly DbContext _context;
         protected readonly DbSet<TEntity> _entities;
 
-        public RepositoryBase(ProfileDbContext context)
+        public RepositoryBase(DbContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));

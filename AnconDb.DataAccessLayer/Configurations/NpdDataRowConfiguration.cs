@@ -10,7 +10,7 @@ namespace AnconDb.DataAccessLayer.Configurations
         {
             Property(n => n.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            HasKey(n => new { n.NpdId, n.NoiseMetric, n.OpMode, n.PowerSetting });   
+            HasKey(n => new { n.NpdId, n.NoiseMetric, n.OpMode, n.PowerSetting, n.Year });   
 
         }
     }

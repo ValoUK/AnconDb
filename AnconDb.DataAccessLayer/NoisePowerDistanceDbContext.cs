@@ -19,7 +19,7 @@ namespace AnconDb.DataAccessLayer
             : base("name=NpdTablesDbConnection")
         {
             this.Configuration.LazyLoadingEnabled = true;
-            //Database.SetInitializer<NoisePowerDistanceDbContext>
+            Database.SetInitializer<NoisePowerDistanceDbContext>(new DropCreateDatabaseAlways<NoisePowerDistanceDbContext>());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

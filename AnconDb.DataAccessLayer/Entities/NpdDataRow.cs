@@ -18,7 +18,7 @@ namespace AnconDb.DataAccessLayer.Entities
 
         public double PowerSetting { get; set; }
 
-        public string Year { get; set; }
+        public int Year { get; set; }
 
         public double Log200_ft { get; set; }
 

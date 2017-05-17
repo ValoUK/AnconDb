@@ -18,148 +18,87 @@ namespace AnconDb
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            //Console.WriteLine("Creating profile...");
-            //var pro = new Profile
+            //Profiles
+            //using (var uow = new UnitOfWork(new ProfileDbContext()))
             //{
-            //    Name = "AB727_04",
-            //    NpdId = "3JT8D",
-            //    Units = true,
-            //    Year = "2013",
-            //    OperationType = "A",
-            //    EngineType = "JET",
-            //    EngineInstallType = "C3",
-            //    NumberOfEngines = 3,
-            //    Weight_kg = 65320.2d,
-            //    NpdAdjustment_dB = -3d,
-            //};
+            //    int count = 0;
+            //    foreach (var dir in Directory.EnumerateDirectories(@"G:\CORE\PROFILE", "PRD2016*"))
+            //    {
+            //        //var dir = @"G:\CORE\PROFILE\PRD2016_STN";
+            //        Console.WriteLine($"Processing directory {dir}");
+            //        foreach (var file in Directory.EnumerateFiles(dir, "*.PRD"))
+            //        {
+            //            count++;
+            //            Console.WriteLine(Path.GetFileName(file));
+            //            var pro = new Profile();
+            //            var profilePoints = new List<ProfilePoint>();
+            //            var prdFileProcessor = new PrdFileProcessor();
 
-            //var pro2 = new Profile
-            //{
-            //    Name = "AB727_04",
-            //    NpdId = "3JT8D",
-            //    Units = true,
-            //    Year = "2013",
-            //    OperationType = "A",
-            //    EngineType = "JET",
-            //    EngineInstallType = "C3",
-            //    NumberOfEngines = 3,
-            //    Weight_kg = 65320.2d,
-            //    NpdAdjustment_dB = -3d,
-            //};
+            //            try
+            //            {
+            //                prdFileProcessor.Process(file, count, pro, profilePoints);
+            //                uow.Profiles.Add(pro);
+            //                uow.ProfilePoints.AddRange(profilePoints);
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                if (e.Message.Contains("Error reading file"))
+            //                    continue;
+            //                Console.WriteLine(e.Message);
+            //                Console.WriteLine("Press any key to exit.");
+            //                Console.ReadKey();
+            //                return;
+            //            }
+            //        }
+            //        Console.WriteLine();
+            //    }
 
-            //var pro_points = new List<ProfilePoint>();
-            //pro_points.Add(new ProfilePoint
-            //{
-            //    ProfileId = 1,
-            //    PointNum = 1,
-            //    Distance = 100000d,
-            //    Altitude = 3800d,
-            //    Speed = 132d,
-            //    ThrustSet_lbe = 2246.70786d,
-            //});
+            //    try
+            //    {
+            //        uow.Complete();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine("An error occurred when persisting changes to database.");
+            //        Console.WriteLine(e.Message);
+            //        Console.WriteLine(e.StackTrace);
+            //        Console.WriteLine("Press any key to exit.");
+            //        Console.ReadKey();
+            //        return;
+            //    }
+            //}
 
-            //pro_points.Add(new ProfilePoint
-            //{
-            //    ProfileId = 1,
-            //    PointNum = 2,
-            //    Distance = 40000d,
-            //    Altitude = 2069d,
-            //    Speed = 132d,
-            //    ThrustSet_lbe = 2246.70786d,
-            //});
+            //Console.WriteLine("Changes succesfully saved to DB.");
+            //Console.WriteLine("Press any key to proceed to Npd data processing.");
+            //Console.ReadKey();
 
-            //pro_points.Add(new ProfilePoint
-            //{
-            //    ProfileId = 1,
-            //    PointNum = 3,
-            //    Distance = 10000d,
-            //    Altitude = 522d,
-            //    Speed = 80d,
-            //    ThrustSet_lbe = 4123.707817d,
-            //});
-
-            using (var uow = new UnitOfWork(new ProfileDbContext()))
+            using (var uow = new UnitOfWorkNpd(new NoisePowerDistanceDbContext()))
             {
-                //    try
-                //    {
-                //        uow.Profiles.Add(pro);
-                //        uow.ProfilePoints.AddRange(pro_points);
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        Console.WriteLine(e.StackTrace);
-                //        Console.WriteLine("Press any key to exit.");
-                //        Console.ReadKey();
-                //        return;
-                //    }
+               
+                foreach (var file in Directory.EnumerateFiles(@"G:\CORE\NPD", "NOISEG1*.CSV"))
+                {
+                    var npdDataTable = new List<NpdDataRow>();
+                    var npdFileProc = new NpdFileProcessor();               
+                    npdFileProc.Process(file, npdDataTable);
+                    uow.NpdDataTable.AddRange(npdDataTable);
+                    uow.Complete();
+                }
 
-                //    try
-                //    {
-                //        uow.Complete();
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        Console.WriteLine(e.Message);
-                //        Console.WriteLine(e.StackTrace);
-                //        Console.WriteLine("Press any key to exit.");
-                //        Console.ReadKey();
-                //        return;
-                //    }
-
-                //    Console.WriteLine("Changes succesfully saved to DB.");
+                //try
+                //{
+                //    uow.Complete();
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine("An error occurred when persisting changes to database.");
+                //    Console.WriteLine(e.Message);
+                //    Console.WriteLine(e.StackTrace);
                 //    Console.WriteLine("Press any key to exit.");
                 //    Console.ReadKey();
                 //    return;
                 //}
-
-                int count = 0;
-                foreach (var dir in Directory.EnumerateDirectories(@"G:\CORE\PROFILE", "PRD2016*"))
-                {
-                    //var dir = @"G:\CORE\PROFILE\PRD2016_STN";
-                    Console.WriteLine($"Processing directory {dir}");
-                    foreach (var file in Directory.EnumerateFiles(dir, "*.PRD"))
-                    {
-                        count++;
-                        Console.WriteLine(Path.GetFileName(file));
-                        var pro = new Profile();
-                        var profilePoints = new List<ProfilePoint>();
-                        var prdFileProcessor = new PrdFileProcessor();
-
-                        try
-                        {
-                            prdFileProcessor.Process(file, count, pro, profilePoints);
-                            uow.Profiles.Add(pro);
-                            uow.ProfilePoints.AddRange(profilePoints);
-                        }
-                        catch (Exception e)
-                        {
-                            if (e.Message.Contains("Error reading file"))
-                                continue;
-                            Console.WriteLine(e.Message);
-                            Console.WriteLine("Press any key to exit.");
-                            Console.ReadKey();
-                            return;
-                        }
-                    }
-                    Console.WriteLine();
-                }
-
-                try
-                {
-                    uow.Complete();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("An error occurred when persisting changes to database.");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    Console.WriteLine("Press any key to exit.");
-                    Console.ReadKey();
-                    return;
-                }
             }
 
-            Console.WriteLine("Changes succesfully saved to DB.");
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
             return;

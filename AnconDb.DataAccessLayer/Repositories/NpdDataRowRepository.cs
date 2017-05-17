@@ -2,13 +2,12 @@
 
 namespace AnconDb.DataAccessLayer.Repositories
 {
-    public class ProfileRepository : RepositoryBase<Profile>
+    public class NpdDataRowRepository : RepositoryBase<NpdDataRow>
     {
-        public ProfileRepository(ProfileDbContext context)
+        public NpdDataRowRepository(NoisePowerDistanceDbContext context)
             : base(context)
         {
-
+             
         }
-
     }
 }

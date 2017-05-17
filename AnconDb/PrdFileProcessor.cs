@@ -13,11 +13,19 @@ namespace AnconDb
         public void Process(string prdFilePath, int profileId, Profile pro, List<ProfilePoint> profilePoints)
         {
             string name = Path.GetFileNameWithoutExtension(prdFilePath);
+            if (!Int32.TryParse(name.Substring(name.IndexOf('D') + 1, name.IndexOf('_') - 1), out int year))
+            {
+                throw new Exception($"Error file name format for: {prdFilePath}");
+            }
+            var airport = name.Substring(name.IndexOf('_') + 1);
+
             string opType = name.Substring(0, 1);
             if (opType != "A")
                 opType = "D";
             pro.Name = name;
             pro.OperationType = opType;
+            pro.Year = year;
+            pro.Airport = airport;
 
             using (var file = new StreamReader(prdFilePath))
             {
